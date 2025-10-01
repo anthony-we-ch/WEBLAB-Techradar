@@ -1,0 +1,20 @@
+# general
+.DS_Store
+node_modules/
+dist/
+build/
+coverage/
+.env
+.env.*
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# Angular
+frontend/.angular/cache
+
+# Docker
+docker-data/
