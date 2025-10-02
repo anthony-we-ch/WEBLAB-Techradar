@@ -1,0 +1,26 @@
+<h1>WEBLAB Tech-Radar</h1>
+
+<div>
+  <button (click)="check()">Health check (public)</button>
+  <pre *ngIf="resp">{{ resp | json }}</pre>
+</div>
+
+<hr>
+
+<div>
+  <ng-container *ngIf="(isAuth$ | async); else loggedOut">
+    <p>Eingeloggt ✔️</p>
+    <button (click)="checkSecure()">Test /api/secure/me</button>
+    <pre *ngIf="secureResp">{{ secureResp | json }}</pre>
+
+    <h3>Profil</h3>
+    <pre>{{ (user$ | async) | json }}</pre>
+
+    <button (click)="logout()">Logout</button>
+  </ng-container>
+
+  <ng-template #loggedOut>
+    <p>Nicht eingeloggt.</p>
+    <button (click)="login()">Login</button>
+  </ng-template>
+</div>

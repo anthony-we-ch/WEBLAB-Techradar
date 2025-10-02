@@ -1,0 +1,29 @@
+{
+  "name": "weblab-techradar",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Hier befindet sich das Projekt von **Anthony Wernli** für den Kurs [I.BA_WEBLAB.F2501](https://elearning.hslu.ch/ilias/ilias.php?baseClass=ilrepositorygui&ref_id=6557004 'ILIAS Homepage'), kurz **WEBLAB**, des Herbstsemesters 2025. Ziel ist es die [Aufgabenstellung des Technologieradars](https://github.com/web-programming-lab/web-programming-lab-projekt/blob/95134d1041bce5140a3e29f034154216fcffd7ff/Technologie-Radar.md 'GitHub Aufgabenstellung') möglichst getreu umzusetzen. Es wurden also keine Änderungen an den ursprünglichen User-Stories gemacht.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently -n FRONTEND,BACKEND \"cd frontend && ng serve\" \"cd backend && npm run dev\"",
+    "build": "npm run build:frontend && npm run build:backend",
+    "build:frontend": "cd frontend && ng build",
+    "build:backend": "cd backend && npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anthony-we-ch/WEBLAB-Techradar.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anthony-we-ch/WEBLAB-Techradar/issues"
+  },
+  "homepage": "https://github.com/anthony-we-ch/WEBLAB-Techradar#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+  
+}
