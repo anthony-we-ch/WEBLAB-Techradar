@@ -1,0 +1,32 @@
+{
+  // ---------- Editor ----------
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always",
+    "source.organizeImports": "always"
+  },
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "files.eol": "\n",
+
+  // ---------- TypeScript ----------
+  // Sorgt dafür, dass VS Code die Projekt-Typen nutzt statt die globale Installation
+  "typescript.tsdk": "node_modules/typescript/lib",
+
+  // ---------- ESLint ----------
+  "eslint.validate": ["typescript", "typescriptreact", "html"],
+  "eslint.alwaysShowStatus": true,
+  "eslint.format.enable": true,
+
+  // ---------- Prettier ----------
+  "prettier.singleQuote": false,
+  "prettier.semi": true,
+  "prettier.printWidth": 100,
+
+  // ---------- Terminal ----------
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+
+  // ---------- Empfehlungen für dieses Projekt ----------
+  "extensions.ignoreRecommendations": false
+}
