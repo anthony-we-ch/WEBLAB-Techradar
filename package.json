@@ -9,6 +9,9 @@
     "build": "npm run build:frontend && npm run build:backend",
     "build:frontend": "cd frontend && ng build",
     "build:backend": "cd backend && npm run build",
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:backend": "cd backend && npm run lint",
+    "lint": "npm run lint:frontend && npm run lint:backend",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

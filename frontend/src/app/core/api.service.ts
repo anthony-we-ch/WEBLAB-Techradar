@@ -1,24 +1,41 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+
+export interface HealthResponse {
+  ok: boolean;
+  time: string;
+}
+
+export interface SecureMeResponse {
+  ok: boolean;
+}
+
+export interface RadarItem {
+  id?: string;
+  title: string;
+  description?: string;
+  status: 'adopt' | 'trial' | 'assess' | 'hold';
+  createdAt?: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  private base = 'http://localhost:3000/api';
-  constructor(private http: HttpClient) {}
+  private readonly http = inject(HttpClient);
+  private readonly base = 'http://localhost:3000/api';
 
   health() {
-    return this.http.get<{ ok: boolean; time: string }>(`${this.base}/health`);
+    return this.http.get<HealthResponse>(`${this.base}/health`);
   }
-  
+
   secureMe() {
-    return this.http.get<{ ok: boolean }>(`${this.base}/secure/me`);
+    return this.http.get<SecureMeResponse>(`${this.base}/secure/me`);
   }
-  
+
   listRadar() {
-    return this.http.get<any[]>(`${this.base}/radar`);
+    return this.http.get<RadarItem[]>(`${this.base}/radar`);
   }
-  
-  createRadar(body: any) {
-    return this.http.post(`${this.base}/radar`, body);
+
+  createRadar(body: RadarItem) {
+    return this.http.post<RadarItem>(`${this.base}/radar`, body);
   }
 }
