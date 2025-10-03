@@ -21,12 +21,17 @@
     <form [formGroup]="form" (ngSubmit)="create()">
       <div>
         <label for="title">Title</label><br />
-        <input type="text" formControlName="title" />
+        <input id="title" type="text" formControlName="title" />
+      </div>
+
+      <div>
+        <input id="private" type="checkbox" formControlName="private" />
+        <label for="private">Privat</label>
       </div>
 
       <div>
         <label for="status">Status</label><br />
-        <select formControlName="status">
+        <select id="status" formControlName="status">
           <option value="adopt">adopt</option>
           <option value="trial">trial</option>
           <option value="assess">assess</option>
@@ -35,8 +40,24 @@
       </div>
 
       <div>
+        <label for="quadrant">Quadrant</label><br />
+        <select id="quadrant" formControlName="quadrant">
+          <option value="languages-frameworks">languages &amp; frameworks</option>
+          <option value="techniques">techniques</option>
+          <option value="tools">tools</option>
+          <option value="platforms">platforms</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="reason">Begründung</label><br />
+        <textarea id="reason" rows="3" formControlName="reason"
+          placeholder="Warum gehört das auf den Radar?"></textarea>
+      </div>
+
+      <div>
         <label for="description">Beschreibung</label><br />
-        <textarea rows="3" formControlName="description"></textarea>
+        <textarea id="description" rows="3" formControlName="description" placeholder="Zusätzliche Details"></textarea>
       </div>
 
       <button type="submit" [disabled]="form.invalid">Anlegen</button>

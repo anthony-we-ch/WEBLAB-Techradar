@@ -1,5 +1,5 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { Injectable, inject } from "@angular/core";
 
 export interface HealthResponse {
   ok: boolean;
@@ -10,18 +10,24 @@ export interface SecureMeResponse {
   ok: boolean;
 }
 
+export type RadarStatus = "adopt" | "trial" | "assess" | "hold";
+export type RadarQuadrant = "languages-frameworks" | "techniques" | "tools" | "platforms";
+
 export interface RadarItem {
   id?: string;
   title: string;
+  private?: boolean;
+  status: RadarStatus;
+  quadrant: RadarQuadrant;
+  reason: string;
   description?: string;
-  status: 'adopt' | 'trial' | 'assess' | 'hold';
   createdAt?: string;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class ApiService {
   private readonly http = inject(HttpClient);
-  private readonly base = 'http://localhost:3000/api';
+  private readonly base = "http://localhost:3000/api";
 
   health() {
     return this.http.get<HealthResponse>(`${this.base}/health`);
@@ -39,10 +45,9 @@ export class ApiService {
     return this.http.post<RadarItem>(`${this.base}/radar`, body);
   }
 
-  
   debugHeaders() {
     return this.http.get<{ authorization: string | null; userAgent: string | null }>(
-      'http://localhost:3000/api/debug/headers'
+      "http://localhost:3000/api/debug/headers"
     );
   }
 }

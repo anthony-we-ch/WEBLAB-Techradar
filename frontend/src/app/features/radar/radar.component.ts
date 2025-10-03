@@ -3,7 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '@auth0/auth0-angular';
 import { of } from 'rxjs';
-import { ApiService, RadarItem } from '../../core/api.service';
+import { ApiService, RadarItem, RadarQuadrant, RadarStatus } from '../../core/api.service';
 
 @Component({
   selector: 'app-radar',
@@ -22,8 +22,11 @@ export class RadarComponent implements OnInit {
 
   form = this.fb.nonNullable.group({
     title: ['', [Validators.required, Validators.minLength(3)]],
-    description: [''],
-    status: ['assess' as RadarItem['status'], Validators.required],
+    private: [false],
+    status: ['assess' as RadarStatus, Validators.required],
+    quadrant: ['languages-frameworks' as RadarQuadrant, Validators.required],
+    reason: ['', [Validators.required, Validators.minLength(5)]],
+    description: ['', [Validators.required, Validators.minLength(5)]],
   });
 
   ngOnInit(): void {
@@ -36,15 +39,22 @@ export class RadarComponent implements OnInit {
 
   create() {
     if (this.form.invalid) return;
-    const body = this.form.getRawValue();
+    const body = this.form.getRawValue() as RadarItem;
     this.api.createRadar(body).subscribe({
       next: (created) => {
         this.items = [created, ...this.items];
-        this.form.reset({ title: '', description: '', status: 'assess' });
+        this.form.reset({
+          title: '',
+          private: false,
+          status: 'assess',
+          quadrant: 'languages-frameworks',
+          reason: '',
+          description: '',          
+        });
       },
       error: (err) => {
         console.error(err);
-        alert('Speichern fehlgeschlagen (bist du eingeloggt?)');
+        alert('Speichern/Validierung fehlgeschlagen');
       },
     });
   }

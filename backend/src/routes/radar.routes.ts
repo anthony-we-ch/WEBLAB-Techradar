@@ -24,14 +24,30 @@ router.get("/", async (_req, res, next) => {
  */
 router.post('/', jwtCheck, async (req, res, next) => {
   try {
-    // TEMP: Debug – sehen, ob Token korrekt ankommt
-    // console.log('req.auth:', (req as any).auth);
+    const { title, private: isPrivate = false, status, quadrant,  reason = "", description = ""  } = req.body || {};
+    
+    const validStatus   = ['adopt', 'trial', 'assess', 'hold'];
+    const validQuadrant = ['languages-frameworks', 'techniques', 'tools', 'platforms'];
 
-    const { title, description = '', status } = req.body || {};
-    if (!title || !status || !['adopt', 'trial', 'assess', 'hold'].includes(status)) {
-      return res.status(400).json({ error: 'Invalid payload: { title, status } required' });
+    if (!title || !status || !quadrant || !reason) {
+      return res.status(400).json({ error: 'Invalid payload. A title, a status, the quadrant, a reason and a description are required' });
     }
-    const created = await Radar.create({ title, description, status });
+    if (!validStatus.includes(status)) {
+      return res.status(400).json({ error: `Invalid status. Allowed: ${validStatus.join(', ')}` });
+    }
+    if (!validQuadrant.includes(quadrant)) {
+      return res.status(400).json({ error: `Invalid quadrant. Allowed: ${validQuadrant.join(', ')}` });
+    }
+
+    const created = await Radar.create({
+      title,
+      private: Boolean(isPrivate),
+      status,
+      quadrant,
+      reason,
+      description
+    });
+
     res.status(201).json(created);
   } catch (err) {
     next(err);
