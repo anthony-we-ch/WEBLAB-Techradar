@@ -126,7 +126,7 @@
 
 <section>
   <h3>Neues Item</h3>
-  <ng-container *ngIf="(isAuth$ | async); else needLogin">
+  <ng-container>
     <form [formGroup]="form" (ngSubmit)="create()">
       <div>
         <label for="title">Title</label><br />
