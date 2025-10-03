@@ -3,8 +3,8 @@ import { Component, inject, OnInit } from "@angular/core";
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from "@angular/forms";
 import { AuthService } from "@auth0/auth0-angular";
 import { of } from "rxjs";
-import { ApiService, RadarItem, RadarQuadrant, RadarStatus } from "../../core/api.service";
 import type { UpdateTechnologyDto } from '../../core/api.service';
+import { ApiService, RadarItem, RadarQuadrant, RadarStatus } from "../../core/api.service";
 
 @Component({
   selector: "app-radar",
@@ -225,6 +225,7 @@ export class RadarComponent implements OnInit {
   }
 
   // --- Sonstiges ---
+
 
   publishItem(item: RadarItem) {
     // TODO: später Backend-Call (private -> false)

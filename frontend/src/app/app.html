@@ -1,29 +1,29 @@
 <h1>WEBLAB Tech-Radar</h1>
 
-<nav>
+<!-- <nav>
   <a routerLink="/">Radar</a>
-</nav>
+</nav> 
 
 <hr />
 
 <div>
   <button (click)="check()">Health check (public)</button>
   <pre *ngIf="resp">{{ resp | json }}</pre>
-</div>
+</div> -->
 
 <hr>
 
 <div style="margin-top:1rem">
   <ng-container *ngIf="(isAuth$ | async); else loggedOut">
-    <p>Eingeloggt ✔️</p>
-    <button (click)="checkSecure()">Test /api/secure/me</button>
-    <pre *ngIf="secureResp">{{ secureResp | json }}</pre>
+    <p>CTO Ansicht</p>
+    <!-- <button (click)="checkSecure()">Test /api/secure/me</button>
+    <pre *ngIf="secureResp">{{ secureResp | json }}</pre>  -->
     <button (click)="logout()">Logout</button>
-    <button (click)="getToken()">Access Token anzeigen</button>
-    <button (click)="debugHeaders()">Debug: show Authorization header</button>
+    <!-- <button (click)="getToken()">Access Token anzeigen</button>
+    <button (click)="debugHeaders()">Debug: show Authorization header</button>  -->
 
-    <h3>Profil</h3>
-    <pre>{{ (user$ | async) | json }}</pre>
+    <!-- <h3>Profil</h3>
+    <pre>{{ (user$ | async) | json }}</pre> -->
 
     <ng-template #loggedOut>
       <button (click)="login()">Login</button>
@@ -31,7 +31,7 @@
   </ng-container>
 
   <ng-template #loggedOut>
-    <p>Nicht eingeloggt.</p>
+    <p>Mitarbeiter Ansicht</p>
     <button (click)="login()">Login</button>
   </ng-template>
 </div>
