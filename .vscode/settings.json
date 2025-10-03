@@ -1,7 +1,7 @@
 {
   // ---------- Editor ----------
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "always",
     "source.organizeImports": "always"
@@ -15,8 +15,8 @@
   "typescript.tsdk": "node_modules/typescript/lib",
 
   // ---------- ESLint ----------
+  "eslint.enable": true,
   "eslint.validate": ["typescript", "typescriptreact", "html"],
-  "eslint.alwaysShowStatus": true,
   "eslint.format.enable": true,
 
   // ---------- Prettier ----------

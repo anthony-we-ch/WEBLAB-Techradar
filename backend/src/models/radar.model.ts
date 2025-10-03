@@ -1,4 +1,5 @@
-import mongoose, { InferSchemaType, Schema } from "mongoose";
+import type { InferSchemaType } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const RadarSchema = new Schema(
   {

@@ -20,12 +20,12 @@
   <ng-container *ngIf="(isAuth$ | async); else needLogin">
     <form [formGroup]="form" (ngSubmit)="create()">
       <div>
-        <label>Title</label><br />
+        <label for="title">Title</label><br />
         <input type="text" formControlName="title" />
       </div>
 
       <div>
-        <label>Status</label><br />
+        <label for="status">Status</label><br />
         <select formControlName="status">
           <option value="adopt">adopt</option>
           <option value="trial">trial</option>
@@ -35,7 +35,7 @@
       </div>
 
       <div>
-        <label>Beschreibung</label><br />
+        <label for="description">Beschreibung</label><br />
         <textarea rows="3" formControlName="description"></textarea>
       </div>
 

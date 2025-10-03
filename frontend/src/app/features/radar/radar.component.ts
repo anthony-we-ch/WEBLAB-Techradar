@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '@auth0/auth0-angular';
@@ -8,7 +8,7 @@ import { ApiService, RadarItem } from '../../core/api.service';
 @Component({
   selector: 'app-radar',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, DatePipe],
   templateUrl: './radar.component.html',
   styleUrls: ['./radar.component.scss'],
 })
