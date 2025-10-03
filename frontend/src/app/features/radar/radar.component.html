@@ -1,0 +1,49 @@
+<h2>Tech-Radar</h2>
+
+<section>
+  <h3>Liste</h3>
+  <p *ngIf="!items?.length">Noch keine Items vorhanden.</p>
+  <ul>
+    <li *ngFor="let it of items">
+      <strong>{{ it.title }}</strong>
+      <em>({{ it.status }})</em>
+      <div *ngIf="it.description">{{ it.description }}</div>
+      <small *ngIf="it.createdAt">erstellt: {{ it.createdAt | date:'short' }}</small>
+    </li>
+  </ul>
+</section>
+
+<hr>
+
+<section>
+  <h3>Neues Item</h3>
+  <ng-container *ngIf="(isAuth$ | async); else needLogin">
+    <form [formGroup]="form" (ngSubmit)="create()">
+      <div>
+        <label>Title</label><br />
+        <input type="text" formControlName="title" />
+      </div>
+
+      <div>
+        <label>Status</label><br />
+        <select formControlName="status">
+          <option value="adopt">adopt</option>
+          <option value="trial">trial</option>
+          <option value="assess">assess</option>
+          <option value="hold">hold</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Beschreibung</label><br />
+        <textarea rows="3" formControlName="description"></textarea>
+      </div>
+
+      <button type="submit" [disabled]="form.invalid">Anlegen</button>
+    </form>
+  </ng-container>
+
+  <ng-template #needLogin>
+    <p>Bitte einloggen, um neue Items anzulegen.</p>
+  </ng-template>
+</section>
