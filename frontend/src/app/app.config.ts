@@ -31,6 +31,7 @@ export const appConfig: ApplicationConfig = {
           { uri: 'http://localhost:3000/api/*', httpMethod: 'POST' },
           { uri: 'http://localhost:3000/api/*', httpMethod: 'PUT' },
           { uri: 'http://localhost:3000/api/*', httpMethod: 'DELETE' },
+          { uri: 'http://localhost:3000/api/*', httpMethod: 'PATCH' },
         ]
       },
       cacheLocation: 'localstorage',

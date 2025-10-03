@@ -13,7 +13,24 @@ dotenv.config();
 const app = express();
 
 const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
-  // Auth-Fehler von express-oauth2-jwt-bearer / express-jwt
+
+  const status = (err as any)?.status ?? 500;
+  const msg = (err as any)?.message;
+
+  if (status >= 400 && status < 500) {
+    // In Dev: alles loggen
+    if (process.env.NODE_ENV !== 'production') {
+      console.error('[4xx ERROR]', err);
+    }
+    // Wenn der Fehler bereits ein Body-Objekt mitgibt, sende das durch
+    const body = (err as any)?.body;
+    if (body && typeof body === 'object') {
+      return res.status(status).json(body);
+    }
+    // sonst generische, aber klare 4xx-Antwort
+    return res.status(status).json({ error: 'Bad Request', message: msg ?? undefined });
+  }
+  
   if (err && (err.name === 'UnauthorizedError' || (err as any).status === 401)) {
     return res.status(401).json({
       error: 'Unauthorized',
@@ -21,18 +38,10 @@ const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
     });
   }
 
-  // Fehler mit eigenem Status
-  const status = (err as any)?.status ?? 500;
-
-  // In dev etwas mehr Details loggen
   if (process.env.NODE_ENV !== 'production') {
-    console.error('[ERROR]', err);
+    console.error('[500 ERROR]', err);
   }
-
-  return res.status(status).json({
-    error: status === 500 ? 'Internal Server Error' : 'Error',
-    message: (err as any)?.message ?? undefined,
-  });
+  return res.status(500).json({ error: 'Internal Server Error' });
 };
 
 app.use(cors({ origin: "http://localhost:4200", credentials: true }));

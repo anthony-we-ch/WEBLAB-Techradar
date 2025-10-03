@@ -25,6 +25,19 @@ export interface RadarItem {
   updatedAt?: string;
 }
 
+export interface UpdateClassificationDto {
+  status?: RadarStatus;
+  quadrant?: RadarQuadrant;
+  reason: string;
+}
+
+export interface UpdateTechnologyDto {
+  title?: string;
+  description?: string;
+  quadrant?: RadarQuadrant;
+}
+
+
 @Injectable({ providedIn: "root" })
 export class ApiService {
   private readonly http = inject(HttpClient);
@@ -48,6 +61,14 @@ export class ApiService {
 
   deleteRadar(id: string) {
     return this.http.delete<void>(`${this.base}/radar/${id}`);
+  }
+
+  updateClassification(id: string, body: UpdateClassificationDto) {
+    return this.http.patch<RadarItem>(`${this.base}/radar/${id}/classification`, body);
+  }
+
+  updateTechnology(id: string, body: UpdateTechnologyDto) {
+    return this.http.patch<RadarItem>(`${this.base}/radar/${id}/technology`, body);
   }
 
   debugHeaders() {

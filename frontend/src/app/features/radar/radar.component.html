@@ -18,42 +18,107 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let it of sortedItems">
-        <td style="padding: 6px; border-bottom: 1px solid #f0f0f0;">
-          <strong>{{ it.title }}</strong>
-        </td>
-        <td style="padding: 6px; border-bottom: 1px solid #f0f0f0;">
-          <span aria-label="privat">{{ it.private ? '✅' : '—' }}</span>
-        </td>
-        <td style="padding: 6px; border-bottom: 1px solid #f0f0f0;">
-          {{ it.status }}
-        </td>
-        <td style="padding: 6px; border-bottom: 1px solid #f0f0f0;">
-          {{ quadrantLabel[it.quadrant] }}
-        </td>
-        <td style="padding: 6px; border-bottom: 1px solid #f0f0f0;">
-          {{ it.reason }}
-        </td>
-        <td style="padding: 6px; border-bottom: 1px solid #f0f0f0;">
-          {{ it.description || '—' }}
-        </td>
-        <td style="padding: 6px; border-bottom: 1px solid #f0f0f0;">
-          {{ it.createdAt ? (it.createdAt | date:'short') : '—' }}
-        </td>
-        <td style="padding: 6px; border-bottom: 1px solid #f0f0f0;">
-          {{ it.updatedAt ? (it.updatedAt | date:'short') : '—' }}
-        </td>
-        <td style="padding: 6px; border-bottom: 1px solid #f0f0f0; white-space: nowrap;">
-          <button type="button" (click)="changeEinordnung(it)">Einordnung ändern</button>
-          <button type="button" (click)="changeTechnologie(it)">Technologie ändern</button>
-          <button type="button" (click)="publishItem(it)">Publizieren</button>
-          <button type="button" (click)="deleteItem(it)"
-            style="background-color:#d9534f; color:white; border:none; padding:4px 8px; border-radius:4px;">
-            Löschen
-          </button>
-        </td>
-      </tr>
+      <ng-container *ngFor="let it of sortedItems; trackBy: trackById">
+        <!-- Hauptzeile -->
+        <tr>
+          <td><strong>{{ it.title }}</strong></td>
+          <td><span aria-label="privat">{{ it.private ? '✅' : '—' }}</span></td>
+          <td>{{ it.status }}</td>
+          <td>{{ quadrantLabel[it.quadrant] }}</td>
+          <td>{{ it.reason }}</td>
+          <td>{{ it.description || '—' }}</td>
+          <td>{{ it.createdAt ? (it.createdAt | date:'short') : '—' }}</td>
+          <td>{{ it.updatedAt ? (it.updatedAt | date:'short') : '—' }}</td>
+          <td style="white-space: nowrap;">
+            <button type="button" (click)="changeEinordnung(it)">Einordnung ändern</button>
+            <button type="button" (click)="changeTechnologie(it)">Technologie ändern</button>
+            <button type="button" (click)="publishItem(it)">Publizieren</button>
+            <button type="button" (click)="deleteItem(it)"
+              style="background-color:#d9534f; color:white; border:none; padding:4px 8px; border-radius:4px;">
+              Löschen
+            </button>
+          </td>
+        </tr>
+
+        <!-- Editorzeile (steht jetzt IM *ngFor*-Scope, daher ist 'it' bekannt) -->
+        <tr *ngIf="editingClassId === it.id" style="background:#fafafa;">
+          <td colspan="9" style="padding: 10px; border-bottom: 1px solid #eee;">
+            <form [formGroup]="formClass" (ngSubmit)="confirmEinordnung(it)"
+              style="display:grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap:10px; align-items:end;">
+              <div>
+                <label for="status-{{it.id}}">Status</label><br />
+                <select id="status-{{it.id}}" formControlName="status">
+                  <option value="adopt">adopt</option>
+                  <option value="trial">trial</option>
+                  <option value="assess">assess</option>
+                  <option value="hold">hold</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="quadrant-{{it.id}}">Quadrant</label><br />
+                <select id="quadrant-{{it.id}}" formControlName="quadrant">
+                  <option value="languages-frameworks">languages &amp; frameworks</option>
+                  <option value="techniques">techniques</option>
+                  <option value="tools">tools</option>
+                  <option value="platforms">platforms</option>
+                </select>
+              </div>
+
+              <div style="grid-column: span 3;">
+                <label for="reason-{{it.id}}">Begründung (Pflicht)</label><br />
+                <input id="reason-{{it.id}}" type="text" formControlName="reason"
+                  placeholder="Kurz begründen (min. 3 Zeichen)" style="width:100%;" />
+              </div>
+
+              <div style="text-align:right;">
+                <button type="button" (click)="cancelEinordnungEditor()">Abbrechen</button>
+                <button type="submit" [disabled]="formClass.invalid"
+                  style="margin-left:6px; background:#0b6; color:#fff; border:none; padding:4px 10px; border-radius:4px;">
+                  Bestätigen
+                </button>
+              </div>
+            </form>
+          </td>
+        </tr>
+        <tr *ngIf="editingTechId === it.id" style="background:#f7fbff;">
+          <td colspan="9" style="padding: 10px; border-bottom: 1px solid #eee;">
+            <form [formGroup]="formTech" (ngSubmit)="confirmTechnologie(it)"
+              style="display:grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap:10px; align-items:end;">
+
+              <div style="grid-column: span 2;">
+                <label for="title-tech-{{it.id}}">Titel (min. 3)</label><br />
+                <input id="title-tech-{{it.id}}" type="text" formControlName="title" style="width:100%;" />
+              </div>
+
+              <div style="grid-column: span 3;">
+                <label for="desc-tech-{{it.id}}">Beschreibung</label><br />
+                <input id="desc-tech-{{it.id}}" type="text" formControlName="description" style="width:100%;" />
+              </div>
+
+              <div>
+                <label for="quadrant-tech-{{it.id}}">Quadrant</label><br />
+                <select id="quadrant-tech-{{it.id}}" formControlName="quadrant">
+                  <option value="languages-frameworks">languages &amp; frameworks</option>
+                  <option value="techniques">techniques</option>
+                  <option value="tools">tools</option>
+                  <option value="platforms">platforms</option>
+                </select>
+              </div>
+
+              <div style="grid-column: 1 / -1; text-align:right;">
+                <button type="button" (click)="cancelTechnologieEditor()">Abbrechen</button>
+                <button type="submit" [disabled]="formTech.invalid"
+                  style="margin-left:6px; background:#0b6; color:#fff; border:none; padding:4px 10px; border-radius:4px;">
+                  Bestätigen
+                </button>
+              </div>
+            </form>
+          </td>
+        </tr>
+      </ng-container>
     </tbody>
+
   </table>
 </section>
 
