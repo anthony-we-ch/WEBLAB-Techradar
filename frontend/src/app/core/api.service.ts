@@ -38,4 +38,11 @@ export class ApiService {
   createRadar(body: RadarItem) {
     return this.http.post<RadarItem>(`${this.base}/radar`, body);
   }
+
+  
+  debugHeaders() {
+    return this.http.get<{ authorization: string | null; userAgent: string | null }>(
+      'http://localhost:3000/api/debug/headers'
+    );
+  }
 }

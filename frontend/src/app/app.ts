@@ -27,7 +27,20 @@ export class AppComponent {
   }
 
   checkSecure() {
-    this.api.secureMe().subscribe((r) => (this.secureResp = r));
+    this.auth?.isAuthenticated$.subscribe(isAuth => {
+      if (!isAuth) { alert('Bitte erst einloggen'); return; }
+      this.api.secureMe().subscribe({
+        next: r => this.secureResp = r,
+        error: e => console.error('secure err', e)
+      });
+    });
+  }
+
+  getToken() {
+    this.auth?.getAccessTokenSilently().subscribe(t => {
+      console.log('ACCESS TOKEN:', t);
+      alert(t ? 'Token in Konsole geloggt' : 'Kein Token');
+    });
   }
 
   login() {
@@ -40,5 +53,9 @@ export class AppComponent {
         returnTo: typeof window !== 'undefined' ? window.location.origin : '/',
       },
     });
+  }
+
+  debugHeaders() {
+    this.api.debugHeaders().subscribe(console.log, console.error);
   }
 }

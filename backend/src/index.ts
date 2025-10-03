@@ -13,8 +13,26 @@ dotenv.config();
 const app = express();
 
 const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
-  console.error(err);
-  res.status(500).json({ error: 'Internal Server Error' });
+  // Auth-Fehler von express-oauth2-jwt-bearer / express-jwt
+  if (err && (err.name === 'UnauthorizedError' || (err as any).status === 401)) {
+    return res.status(401).json({
+      error: 'Unauthorized',
+      message: (err as any).message ?? 'invalid or expired token',
+    });
+  }
+
+  // Fehler mit eigenem Status
+  const status = (err as any)?.status ?? 500;
+
+  // In dev etwas mehr Details loggen
+  if (process.env.NODE_ENV !== 'production') {
+    console.error('[ERROR]', err);
+  }
+
+  return res.status(status).json({
+    error: status === 500 ? 'Internal Server Error' : 'Error',
+    message: (err as any)?.message ?? undefined,
+  });
 };
 
 app.use(cors({ origin: "http://localhost:4200", credentials: true }));
@@ -26,7 +44,14 @@ app.get("/api/health", (_, res) => res.json({ ok: true, time: new Date().toISOSt
 // Radar API
 app.use('/api/radar', radarRoutes);
 
-// Fehler-Handler (saubere JSON-Fehler)
+app.get('/api/debug/headers', (req, res) => {
+  res.json({
+    authorization: req.headers.authorization ?? null,
+    userAgent: req.headers['user-agent'] ?? null,
+  });
+});
+
+// Fehler-Handler
 app.use(errorHandler);
 
 // Beispiel: Radar-Model (sehr simpel)
@@ -45,7 +70,7 @@ app.get("/api/radar", async (_, res) => {
 });
 
 // Geschützte Route:
-app.get('/api/secure/me', jwtCheck, (_req, res) => {
+app.get('/api/secure/me', jwtCheck, (req, res) => {
   res.json({ ok: true });
 });
 
