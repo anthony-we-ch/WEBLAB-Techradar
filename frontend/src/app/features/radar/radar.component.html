@@ -1,16 +1,42 @@
 <h2>Tech-Radar</h2>
 
 <section>
-  <h3>Liste</h3>
   <p *ngIf="!items?.length">Noch keine Items vorhanden.</p>
-  <ul>
-    <li *ngFor="let it of items">
-      <strong>{{ it.title }}</strong>
-      <em>({{ it.status }})</em>
-      <div *ngIf="it.description">{{ it.description }}</div>
-      <small *ngIf="it.createdAt">erstellt: {{ it.createdAt | date:'short' }}</small>
-    </li>
-  </ul>
+
+  <table *ngIf="items?.length" style="width:100%; border-collapse: collapse;">
+    <thead>
+      <tr>
+        <th style="text-align:left; padding: 6px; border-bottom: 1px solid #ddd;">Titel</th>
+        <th style="text-align:left; padding: 6px; border-bottom: 1px solid #ddd;">Privat</th>
+        <th style="text-align:left; padding: 6px; border-bottom: 1px solid #ddd;">Status</th>
+        <th style="text-align:left; padding: 6px; border-bottom: 1px solid #ddd;">Quadrant</th>
+        <th style="text-align:left; padding: 6px; border-bottom: 1px solid #ddd;">Begründung</th>
+        <th style="text-align:left; padding: 6px; border-bottom: 1px solid #ddd;">Beschreibung</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let it of sortedItems">
+        <td style="padding: 6px; border-bottom: 1px solid #f0f0f0;">
+          <strong>{{ it.title }}</strong>
+        </td>
+        <td style="padding: 6px; border-bottom: 1px solid #f0f0f0;">
+          <span aria-label="privat">{{ it.private ? '✅' : '—' }}</span>
+        </td>
+        <td style="padding: 6px; border-bottom: 1px solid #f0f0f0;">
+          {{ it.status }}
+        </td>
+        <td style="padding: 6px; border-bottom: 1px solid #f0f0f0;">
+          {{ quadrantLabel[it.quadrant] }}
+        </td>
+        <td style="padding: 6px; border-bottom: 1px solid #f0f0f0;">
+          {{ it.reason }}
+        </td>
+        <td style="padding: 6px; border-bottom: 1px solid #f0f0f0;">
+          {{ it.description || '—' }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </section>
 
 <hr>
