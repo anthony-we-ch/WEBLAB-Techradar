@@ -59,7 +59,10 @@ export class RadarComponent implements OnInit {
   }
 
   load() {
-    this.api.listRadar().subscribe((items) => (this.items = items));
+    this.api.listRadar().subscribe(items => {
+      console.log('items', items);
+      this.items = items;
+    });
   }
 
   create() {
@@ -81,6 +84,35 @@ export class RadarComponent implements OnInit {
         console.error(err);
         alert("Speichern/Validierung fehlgeschlagen");
       },
+    });
+  }
+
+  changeEinordnung(item: RadarItem) {
+    // TODO: später Dialog/Overlay zum Ändern von Status/Quadrant
+    console.log('Einordnung ändern:', item);
+  }
+
+  changeTechnologie(item: RadarItem) {
+    // TODO: später Dialog/Overlay zum Ändern von Titel/Beschreibung/Reason
+    console.log('Technologie ändern:', item);
+  }
+
+  publishItem(item: RadarItem) {
+    // TODO: später Backend-Call (private -> false)
+    console.log('Publizieren:', item);
+  }
+
+  deleteItem(item: RadarItem) {
+    if (!item.id) return;
+
+    this.api.deleteRadar(item.id).subscribe({
+      next: () => {
+        this.items = this.items.filter(x => x.id !== item.id);
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Löschen fehlgeschlagen');
+      }
     });
   }
 }

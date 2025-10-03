@@ -12,6 +12,9 @@
         <th style="text-align:left; padding: 6px; border-bottom: 1px solid #ddd;">Quadrant</th>
         <th style="text-align:left; padding: 6px; border-bottom: 1px solid #ddd;">Begründung</th>
         <th style="text-align:left; padding: 6px; border-bottom: 1px solid #ddd;">Beschreibung</th>
+        <th style="text-align:left; padding: 6px; border-bottom: 1px solid #ddd;">Erstellt am</th>
+        <th style="text-align:left; padding: 6px; border-bottom: 1px solid #ddd;">Zuletzt geändert</th>
+        <th style="text-align:left; padding: 6px; border-bottom: 1px solid #ddd;">Aktionen</th>
       </tr>
     </thead>
     <tbody>
@@ -33,6 +36,21 @@
         </td>
         <td style="padding: 6px; border-bottom: 1px solid #f0f0f0;">
           {{ it.description || '—' }}
+        </td>
+        <td style="padding: 6px; border-bottom: 1px solid #f0f0f0;">
+          {{ it.createdAt ? (it.createdAt | date:'short') : '—' }}
+        </td>
+        <td style="padding: 6px; border-bottom: 1px solid #f0f0f0;">
+          {{ it.updatedAt ? (it.updatedAt | date:'short') : '—' }}
+        </td>
+        <td style="padding: 6px; border-bottom: 1px solid #f0f0f0; white-space: nowrap;">
+          <button type="button" (click)="changeEinordnung(it)">Einordnung ändern</button>
+          <button type="button" (click)="changeTechnologie(it)">Technologie ändern</button>
+          <button type="button" (click)="publishItem(it)">Publizieren</button>
+          <button type="button" (click)="deleteItem(it)"
+            style="background-color:#d9534f; color:white; border:none; padding:4px 8px; border-radius:4px;">
+            Löschen
+          </button>
         </td>
       </tr>
     </tbody>

@@ -1,4 +1,4 @@
-import type { InferSchemaType } from "mongoose";
+import type { InferSchemaType, Types } from "mongoose";
 import mongoose, { Schema } from "mongoose";
 
 const RadarSchema = new Schema(
@@ -18,8 +18,42 @@ const RadarSchema = new Schema(
     reason: { type: String, default: "siehe Dokumentation", required: true, trim: true },
     description: { type: String, default: "siehe Dokumentation", required: true},
   },
-  { timestamps: { createdAt: true, updatedAt: false } }
+  {
+    timestamps: { createdAt: true, updatedAt: true },
+    versionKey: false,
+  }
 );
+
+RadarSchema.virtual('id').get(function (this: { _id: Types.ObjectId }) {
+  return this._id.toHexString();
+});
+
+type TransformRet = {
+  _id?: Types.ObjectId;
+  id?: string;
+} & Record<string, unknown>;
+
+RadarSchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: (_doc, ret: TransformRet) => {
+    if (ret._id !== undefined) {
+      delete ret._id;
+    }
+    return ret;
+  },
+});
+
+RadarSchema.set('toObject', {
+  virtuals: true,
+  versionKey: false,
+  transform: (_doc, ret: TransformRet) => {
+    if (ret._id !== undefined) {
+      delete ret._id;
+    }
+    return ret;
+  },
+});
 
 export type RadarDoc = InferSchemaType<typeof RadarSchema>;
 

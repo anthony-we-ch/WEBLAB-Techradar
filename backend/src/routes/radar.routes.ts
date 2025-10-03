@@ -10,8 +10,8 @@ const router = Router();
  */
 router.get("/", async (_req, res, next) => {
   try {
-    const items = await Radar.find().sort({ createdAt: -1 }).lean();
-    res.json(items);
+    const docs = await Radar.find().sort({ createdAt: -1 });
+    res.json(docs.map(d => d.toJSON()));
   } catch (err) {
     next(err);
   }
@@ -20,7 +20,6 @@ router.get("/", async (_req, res, next) => {
 /**
  * POST /api/radar
  * Neues Radar-Item anlegen (geschützt)
- * body: { title: string; description?: string; status: 'adopt'|'trial'|'assess'|'hold' }
  */
 router.post('/', jwtCheck, async (req, res, next) => {
   try {
@@ -48,7 +47,24 @@ router.post('/', jwtCheck, async (req, res, next) => {
       description
     });
 
-    res.status(201).json(created);
+    res.status(201).json(created.toJSON());
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * DELETE /api/radar/:id
+ * existierendes Item löschen (geschützt)
+ */
+router.delete('/:id', jwtCheck, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const deleted = await Radar.findByIdAndDelete(id);
+    if (!deleted) {
+      return res.status(404).json({ error: 'Not found' });
+    }
+    res.status(204).send(); // kein Body bei Erfolg
   } catch (err) {
     next(err);
   }

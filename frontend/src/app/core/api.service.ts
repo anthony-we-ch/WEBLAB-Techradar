@@ -22,6 +22,7 @@ export interface RadarItem {
   reason: string;
   description?: string;
   createdAt?: string;
+  updatedAt?: string;
 }
 
 @Injectable({ providedIn: "root" })
@@ -43,6 +44,10 @@ export class ApiService {
 
   createRadar(body: RadarItem) {
     return this.http.post<RadarItem>(`${this.base}/radar`, body);
+  }
+
+  deleteRadar(id: string) {
+    return this.http.delete<void>(`${this.base}/radar/${id}`);
   }
 
   debugHeaders() {
