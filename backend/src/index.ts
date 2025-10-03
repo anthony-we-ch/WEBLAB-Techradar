@@ -1,17 +1,33 @@
-import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import type { ErrorRequestHandler } from 'express';
+import express from "express";
 import mongoose from "mongoose";
 import { jwtCheck } from './auth';
+import { CONFIG } from './config';
+import { connectDb } from './db';
+import radarRoutes from './routes/radar.routes';
 
 dotenv.config();
 
 const app = express();
+
+const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+  console.error(err);
+  res.status(500).json({ error: 'Internal Server Error' });
+};
+
 app.use(cors({ origin: "http://localhost:4200", credentials: true }));
 app.use(express.json());
 
 // Healthcheck
 app.get("/api/health", (_, res) => res.json({ ok: true, time: new Date().toISOString() }));
+
+// Radar API
+app.use('/api/radar', radarRoutes);
+
+// Fehler-Handler (saubere JSON-Fehler)
+app.use(errorHandler);
 
 // Beispiel: Radar-Model (sehr simpel)
 const radarItemSchema = new mongoose.Schema({
@@ -39,7 +55,7 @@ app.post("/api/radar", async (req, res) => {
 });
 
 // Start + DB
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT) || 3000;
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/tech-radar";
 
 mongoose
@@ -54,3 +70,11 @@ mongoose
     console.error("MongoDB connection error:", err);
     process.exit(1);
   });
+
+// Mongoose Events loggen
+(async () => {
+  await connectDb(CONFIG.MONGODB_URI);
+  app.listen(CONFIG.PORT, () => {
+    console.log(`API on http://localhost:${CONFIG.PORT}`);
+  });
+})();

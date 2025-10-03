@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { jwtCheck } from "../auth"; // POST ist geschützt
+import { jwtCheck } from "../auth";
 import { Radar } from "../models/radar.model";
 
 const router = Router();
@@ -25,8 +25,8 @@ router.get("/", async (_req, res, next) => {
 router.post("/", jwtCheck, async (req, res, next) => {
   try {
     const { title, description = "", status } = req.body || {};
-    if (!title || !status) {
-      return res.status(400).json({ error: "title and status are required" });
+    if (!title || !status || !['adopt', 'trial', 'assess', 'hold'].includes(status)) {
+      return res.status(400).json({ error: "Invalid Input. Title and Status are required" });
     }
     const created = await Radar.create({ title, description, status });
     res.status(201).json(created);

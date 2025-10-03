@@ -1,7 +1,8 @@
 import { auth } from 'express-oauth2-jwt-bearer';
+import { CONFIG } from './config';
 
 export const jwtCheck = auth({
-  audience: 'https://tech-radar.api',
-  issuerBaseURL: 'https://dev-6jjybpjc1o3rkh2v.eu.auth0.com',// deine Auth0-Domain + abschließender /
+  audience: CONFIG.AUTH0_AUDIENCE,
+  issuerBaseURL: CONFIG.AUTH0_ISSUER,
   tokenSigningAlg: 'RS256',
 });
