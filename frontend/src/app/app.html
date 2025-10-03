@@ -1,5 +1,11 @@
 <h1>WEBLAB Tech-Radar</h1>
 
+<nav>
+  <a routerLink="/">Radar</a>
+</nav>
+
+<hr />
+
 <div>
   <button (click)="check()">Health check (public)</button>
   <pre *ngIf="resp">{{ resp | json }}</pre>
@@ -7,16 +13,19 @@
 
 <hr>
 
-<div>
+<div style="margin-top:1rem">
   <ng-container *ngIf="(isAuth$ | async); else loggedOut">
     <p>Eingeloggt ✔️</p>
     <button (click)="checkSecure()">Test /api/secure/me</button>
     <pre *ngIf="secureResp">{{ secureResp | json }}</pre>
+    <button (click)="logout()">Logout</button>
 
     <h3>Profil</h3>
     <pre>{{ (user$ | async) | json }}</pre>
 
-    <button (click)="logout()">Logout</button>
+    <ng-template #loggedOut>
+      <button (click)="login()">Login</button>
+    </ng-template>
   </ng-container>
 
   <ng-template #loggedOut>
@@ -24,3 +33,7 @@
     <button (click)="login()">Login</button>
   </ng-template>
 </div>
+
+<hr />
+
+<router-outlet></router-outlet>

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
 import { of } from 'rxjs';
 import { ApiService, HealthResponse, SecureMeResponse } from './core/api.service';
@@ -7,7 +8,7 @@ import { ApiService, HealthResponse, SecureMeResponse } from './core/api.service
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterOutlet],
   templateUrl: './app.html',
   styleUrls: ['./app.scss'],
 })
